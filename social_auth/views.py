@@ -38,7 +38,7 @@ SESSION_EXPIRATION = setting('SOCIAL_AUTH_SESSION_EXPIRATION', True)
 BACKEND_ERROR_REDIRECT = setting('SOCIAL_AUTH_BACKEND_ERROR_URL',
                                  LOGIN_ERROR_URL)
 SANITIZE_REDIRECTS = setting('SOCIAL_AUTH_SANITIZE_REDIRECTS', True)
-ERROR_MESSAGE = setting('LOGIN_ERROR_MESSAGE', settings.LOGIN_ERROR_MESSAGE)
+ERROR_MESSAGE = setting('LOGIN_ERROR_MESSAGE', None)
 
 
 def dsa_view(redirect_name=None):
@@ -172,7 +172,8 @@ def complete_process(request, backend, *args, **kwargs):
               request.session.pop(REDIRECT_FIELD_NAME, '') or \
               DEFAULT_REDIRECT
     else:
-        messages.error(request, ERROR_MESSAGE)
+        if ERROR_MESSAGE:
+            messages.error(request, ERROR_MESSAGE)
         url = LOGIN_ERROR_URL
     return HttpResponseRedirect(url)
 
